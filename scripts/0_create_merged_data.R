@@ -1,4 +1,22 @@
-#######this code creates a merged file using the raw ESS dive data for EC1 soils from this data product https://data.ess-dive.lbl.gov/view/doi%3A10.15485%2F1960313 
+
+###############################################################################
+# Title: Total Soil Carbon Predictors by Region and Transect Location
+# Author: Avni Malhotra
+# Date: January 16, 2026
+# The script just needs to be run once when doing the full analysis for the first time
+# The output file merged.csv is needed for the script files 1_TC_violin_plots.R and 2_TC_stats.R
+# Purpose:
+#   - Read all raw EC1 soils CSV files from the ESS-DIVE data product
+#     "EXCHANGE v1: Coastal soil and sediment properties across the
+#      terrestrial–aquatic interface"
+#     (https://data.ess-dive.lbl.gov/view/doi%3A10.15485%2F1960313)
+#   - Keep only files that contain a "kit_id" column.
+#   - Ensure each record has an explicit transect_location
+#     (wetland / transition / upland), expanding rows when necessary.
+#   - Merge all datasets by kit_id and transect_location into a single
+#     analysis-ready file: data/processed/merged.csv
+###############################################################################
+
 
 # Load necessary libraries
 library(ggplot2)
@@ -8,7 +26,7 @@ library(tidyr)
 
 
 # Specify the folder path
-folder_path <- "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/aug 2025 update to v3/ec1_soil_v3"
+folder_path <- "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/data/raw/ec1_soil_v3"
 
 # List all CSV files in the folder
 file_list <- list.files(path = folder_path, pattern = "\\.csv$", full.names = TRUE)
@@ -51,4 +69,4 @@ merged_data <- Reduce(function(d1, d2) merge(d1, d2, by = c("kit_id", "transect_
 # Write the merged dataframe to a CSV file
 write.csv(merged_data, file = file.path(folder_path, "merged.csv"), row.names = FALSE)
 
-cat("Merged file saved to 'merged.csv' in the folder:", folder_path, "\n")
+cat("Merged file saved to 'merged.csv' in the folder:", folder_path, "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/data/processed")

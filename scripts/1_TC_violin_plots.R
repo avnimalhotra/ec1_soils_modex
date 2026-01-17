@@ -1,5 +1,24 @@
 
-###plot TC excluding sediment 
+###############################################################################
+# Title: Total Soil Carbon Predictors by Region and Transect Location
+# Author: Avni Malhotra
+# Date: January 16, 2026
+#
+# Purpose:
+#   - Use the merged EC1 soils dataset to:
+#       * Explore total soil carbon (TC) across transect locations
+#         (wetland, transition, upland) for Great Lakes and Mid-Atlantic.
+#       * Generate exploratory scatterplots of TC by transect location and region.
+#       * Create publication-ready violin plots of TC by transect location and region.
+#       * Quantify and export coefficients of variation (CV) for TC:
+#           - by region × transect_location
+#           - by transect_location (regions combined)
+#   - Save figures to:
+#       results/figures/exploratory/
+#       results/figures/paper/
+#     and tables to:
+#       results/tables/
+###############################################################################
 
 # Load necessary libraries
 library(ggplot2)
@@ -8,7 +27,7 @@ library(gridExtra) # For arranging graphs side by side
 library(tidyr)
 
 # Specify the file path for the merged dataset
-merged_file_path <- "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/aug 2025 update to v3/ec1_soil_v3/merged.csv"
+merged_file_path <- "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/data/processed/merged.csv"
 
 # Load the merged dataset
 merged_data <- read.csv(merged_file_path)
@@ -49,10 +68,20 @@ mid_atlantic_plot <- ggplot(mid_atlantic_data, aes(x = transect_location, y = ca
   ) +
   theme_minimal()
 
-# Arrange plots side by side
-grid.arrange(great_lakes_plot, mid_atlantic_plot, ncol = 2)
+# Arrange plots side by side and assign to an object
+tc_scatter <- grid.arrange(great_lakes_plot, mid_atlantic_plot, ncol = 2)
 
-##### make figure pretty for AGU25 poster
+# Save as high-resolution PNG
+ggsave(
+  filename = "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/results/figures/exploratory/tc_scatter.png",
+  plot     = tc_scatter,
+  width    = 7,      # 2 panels * ~3.5" each
+  height   = 3.5,    # inches
+  units    = "in",
+  dpi      = 300
+)
+
+##### make figure for paper
 # Create violin plot for Great Lakes region
 great_lakes_violin <- ggplot(great_lakes_data, aes(x = transect_location, y = carbon_weight_perc)) +
   geom_violin(fill = "#E6FAFD", color = NA, alpha = 0.6) +  # Light blue shading (#E6FAFD), no outlines
@@ -101,7 +130,14 @@ final_plot <- great_lakes_violin + mid_atlantic_violin +
 # Display the final plot
 print(final_plot)
 
-
+# Save final plot for paper as PDF
+ggsave(
+  filename = "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/results/figures/paper/tc_violin_by_region.pdf",
+  plot     = final_plot,
+  width    = 7,      # inches (2 panels side by side)
+  height   = 3.5,    # inches
+  units    = "in"
+)
 
 
 ###table to show cv for each location and region Hypothesis 1 Transitions have the most variability in soil carbon, compared to upland and wetland
@@ -127,6 +163,12 @@ cv_results <- filtered_data %>%
 # Print the results
 print(cv_results)
 
+# Save CV by region and transect_location
+write.csv(
+  cv_results,
+  file = "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/results/tables/cv_region_transect.csv",
+  row.names = FALSE
+)
 
 ####CV for regions combined
 # Filter relevant data with no missing values in carbon_weight_perc
@@ -146,5 +188,10 @@ cv_results_combined <- combined_data %>%
 # Print the results
 print(cv_results_combined)
 
-
+# Save CV by transect_location (regions combined)
+write.csv(
+  cv_results_combined,
+  file = "/Users/malh455/Library/CloudStorage/OneDrive-PNNL/Documents/projects/compass/ec1_soils/ec1_modex_paper/results/tables/cv_transect.csv",
+  row.names = FALSE
+)
 

@@ -1,0 +1,13 @@
+"Region","Predictor","P.Value"
+"Great Lakes","std_K_meq_100g",0.609303609400577
+"Great Lakes","std_bulk_density_g_cm3",8.37900319275356e-05
+"Great Lakes","std_percent_sand",0.0409471065309894
+"Great Lakes","std_ph",0.352444335936049
+"Great Lakes","transect_locationupland",0.771276235049075
+"Great Lakes","transect_locationwetland",0.02173372817765
+"Mid-Atlantic","std_K_meq_100g",0.0504662646716231
+"Mid-Atlantic","std_bulk_density_g_cm3",8.20981322328953e-06
+"Mid-Atlantic","std_percent_sand",0.427909652848541
+"Mid-Atlantic","std_ph",0.0165021671103848
+"Mid-Atlantic","transect_locationupland",0.290223924229254
+"Mid-Atlantic","transect_locationwetland",0.198050273506389
